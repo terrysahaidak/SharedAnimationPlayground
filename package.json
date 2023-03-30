@@ -16,7 +16,7 @@
     "react-native": "0.71.3",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-pager-view": "^6.1.4",
-    "react-native-reanimated": "^3.0.0",
+    "react-native-reanimated": "software-mansion/react-native-reanimated#ab6859ac10b9312c1213c49a84e999dc063ae559",
     "react-native-safe-area-context": "^4.5.0",
     "react-native-screens": "^3.20.0"
   },
