@@ -4,7 +4,6 @@ import {Dimensions, StyleSheet, View, FlatList} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import {routes} from './LightboxExample';
-import {lightboxTransition} from './LightboxScreen';
 
 const dimensions = Dimensions.get('window');
 
@@ -39,7 +38,6 @@ export function LightboxGalleryScreen(): React.ReactElement {
             activeOpacity={0.9}
             onPress={() => nav.navigate(routes.Lightbox, {item})}>
             <Animated.Image
-              sharedTransitionStyle={lightboxTransition}
               sharedTransitionTag={'image-' + item.id}
               source={{uri: item.uri}}
               style={styles.image}

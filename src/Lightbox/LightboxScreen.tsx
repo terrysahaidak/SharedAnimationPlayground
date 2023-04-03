@@ -1,10 +1,8 @@
 import React from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Animated, {
-  Extrapolate,
   FadeIn,
   FadeOut,
-  interpolate,
   runOnJS,
   SharedTransition,
   useAnimatedStyle,
@@ -45,18 +43,10 @@ export function LightboxScreen() {
     scale: useSharedValue(1),
   };
 
-  const opacity = useSharedValue(1);
-
   const panGeture = Gesture.Pan()
     .onChange(event => {
       translation.x.value += event.changeX;
       translation.y.value += event.changeY;
-      opacity.value = interpolate(
-        translation.y.value,
-        [-200, 0, 200],
-        [0, 1, 0],
-        Extrapolate.CLAMP,
-      );
     })
     .onEnd(() => {
       if (Math.abs(translation.x.value) + Math.abs(translation.y.value) > 150) {
@@ -80,23 +70,22 @@ export function LightboxScreen() {
     ],
   }));
 
+  const opacityAnimatedStyle = useAnimatedStyle(() => ({
+    opacity:
+      1 - (Math.abs(translation.x.value) + Math.abs(translation.y.value)) / 100,
+  }));
+
   return (
     <View style={[styles.container]}>
       <Animated.View
         entering={FadeIn.duration(200)}
-        style={[
-          StyleSheet.absoluteFill,
-          {
-            opacity,
-          },
-        ]}>
+        style={[StyleSheet.absoluteFill, opacityAnimatedStyle]}>
         <Pressable style={styles.backdrop} onPress={goBack} />
       </Animated.View>
 
       <GestureDetector gesture={panGeture}>
-        <Animated.View style={[{flex: 1}, animatedStyle]}>
+        <Animated.View style={[animatedStyle, styles.imageContainer]}>
           <Animated.Image
-            sharedTransitionStyle={lightboxTransition}
             source={{uri: activeItem.uri}}
             style={{
               width: activeItem.width,
@@ -130,6 +119,11 @@ const styles = StyleSheet.create({
     left: 10,
     fontSize: 16,
     color: 'white',
+  },
+  imageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
   },
 
   backdrop: {
